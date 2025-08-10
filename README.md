@@ -253,6 +253,9 @@ This ensures **PM2 manages the process inside the container** with proper signal
 When they ask *"How do you ensure zero downtime?"* you can say:  
 > *"I used PM2 in cluster mode with Docker. This way, my backend runs on multiple CPU cores and can restart without dropping requests. The PM2 process manager also ensures automatic restarts if something crashes."*
 
+---
+
+```
 
 ## 📸 Architecture Overview
 
