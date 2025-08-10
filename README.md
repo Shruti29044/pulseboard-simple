@@ -1,115 +1,226 @@
-# PulseBoard – Simple Full-Stack DevOps + Monitoring + NLP Demo
+# Pulseboard Simple
 
-📌 Project Overview
-PulseBoard Simple is an internal web application designed to monitor backend service metrics in real time.
-It features:
+A full-stack internal monitoring and analytics dashboard built with:
+- **Backend:** Node.js (Express) + PM2
+- **Frontend:** React.js + Tailwind CSS + Chart.js + Recharts
+- **Monitoring:** Prometheus & Grafana
+- **Containerization:** Docker & Docker Compose
+- **CI/CD:** GitHub Actions
+- **Orchestration (Optional):** Helm/Kubernetes
+- **Process Management:** PM2 for zero-downtime reloads
 
-Backend API built with Node.js & Express.
+---
 
-Frontend UI built with React.js, Tailwind CSS, Chart.js, and Recharts.
+## 📌 Features
+- Dynamic, responsive UI with **Tailwind CSS**
+- Interactive real-time charts using **Chart.js** and **Recharts**
+- Backend API served by **Express** with Prometheus `/metrics` endpoint
+- **PM2** for production process management (cluster mode)
+- Monitoring stack:
+  - **Prometheus** scrapes backend metrics
+  - **Grafana** visualizes metrics
+- Dockerized full stack (frontend, backend, Prometheus, Grafana)
+- GitHub Actions pipeline for CI/CD
 
-Real-time monitoring using Prometheus and Grafana.
+---
 
-Containerized deployment using Docker & Docker Compose.
+## 🛠 Tech Stack
+| Layer         | Technology |
+|---------------|------------|
+| Frontend      | React.js, Tailwind CSS, Chart.js, Recharts |
+| Backend       | Node.js, Express.js, PM2 |
+| Monitoring    | Prometheus, Grafana |
+| Container     | Docker, Docker Compose |
+| CI/CD         | GitHub Actions |
+| Deployment    | PM2, Docker |
+| Optional      | Helm (for K8s deployment) |
 
-CI/CD pipeline integration using GitHub Actions.
+---
 
-The project replicates a real-world DevOps workflow where backend and frontend services are integrated with monitoring tools for system health tracking.
+## 📂 Project Structure
+```
 
-🛠️ Tech Stack
-Frontend
-React.js (component-based UI)
+pulseboard-simple/
+├── backend/
+│   ├── src/
+│   │   └── index.js
+│   ├── data/
+│   ├── package.json
+│   ├── Dockerfile
+│   ├── ecosystem.config.js
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   ├── Dockerfile
+├── prometheus/
+│   └── prometheus.yml
+├── docker-compose.yml
+└── .github/
+└── workflows/
+└── ci-cd.yml
 
-Tailwind CSS (responsive design)
+````
 
-Chart.js & Recharts (data visualization)
+---
 
-Backend
-Node.js (Express API)
+## 🚀 Setup Instructions
 
-/metrics endpoint for Prometheus scraping
-
-Monitoring
-Prometheus for collecting metrics
-
-Grafana for visualizing metrics
-
-DevOps
-Docker & Docker Compose (containerization & orchestration)
-
-GitHub Actions (CI/CD pipeline)
-
-🚀 How to Run the Project Locally
-1️⃣ Clone the Repository
-bash
-Copy
-Edit
-git clone https://github.com/your-username/pulseboard-simple.git
+### 1️⃣ Clone Repository
+```bash
+git clone https://github.com/Shruti29044/pulseboard-simple.git
 cd pulseboard-simple
-2️⃣ Start Services
-bash
-Copy
-Edit
+````
+
+### 2️⃣ Build and Start Services
+
+```bash
 docker compose up -d --build
-3️⃣ Access Services
-Frontend: http://localhost:3000
+```
 
-Prometheus: http://localhost:9090
+This starts:
 
-Grafana: http://localhost:3001
+* **Backend (PM2)** → `http://localhost:8080`
+* **Frontend** → `http://localhost:3000`
+* **Prometheus** → `http://localhost:9090`
+* **Grafana** → `http://localhost:3001`
 
-📊 Prometheus & Grafana Setup
-Prometheus scrapes the backend /metrics endpoint every 15s.
+### 3️⃣ Check PM2 Processes (inside backend container)
 
-Grafana is pre-configured with a dashboard for service uptime & request performance.
+```bash
+docker compose exec backend sh
+pm2 ls
+```
 
-💡 Challenges Faced & Solutions
-1. Port Conflicts
-Problem: Docker Compose failed to start because port 8080 was already in use.
+---
 
-Solution: Identified the process using netstat -ano & killed it with:
+## 📊 Monitoring
 
-bash
-Copy
-Edit
-taskkill /PID <PID> /F
-2. Prometheus Target Down
-Problem: Prometheus showed backend:8080 as down.
+* Prometheus scrapes backend metrics from `/metrics`
+* Grafana dashboards visualize metrics
 
-Solution: Updated Prometheus config to match backend service name in Docker network.
+Prometheus UI:
 
-3. Frontend “Site Not Reached” Error
-Problem: React app failed to load after container start.
+```
+http://localhost:9090
+```
 
-Solution: Ensured nginx was serving the /dist build output & rebuilt containers.
+Grafana UI:
 
-4. Grafana Plugin Installation Delays
-Problem: Grafana took time to install default plugins during first run.
+```
+http://localhost:3001
+```
 
-Solution: Allowed initial boot time and verified logs with:
+Default Grafana login:
 
-bash
-Copy
-Edit
-docker logs -f grafana
-5. CI/CD Integration
-Problem: Needed automated build/test on GitHub.
+* **Username:** admin
+* **Password:** admin
 
-Solution: Created .github/workflows/ci-cd.yml to build and test containers on push.
+---
 
-📦 Deployment Workflow
-Code changes pushed to main branch.
+## 🔄 CI/CD with GitHub Actions
 
-GitHub Actions CI builds backend & frontend containers.
+The workflow file: `.github/workflows/ci-cd.yml`
 
-Docker Compose used for local development.
+**What it does:**
 
-Prometheus & Grafana containers deployed for monitoring.
+* Runs `npm install` for frontend and backend
+* Runs build for frontend
+* Runs backend tests
+* (Optional) Builds Docker images and pushes to Docker Hub
 
-🏆 Outcome
-Successfully deployed a full-stack monitoring solution locally.
+Trigger:
 
-Integrated DevOps practices: CI/CD, containerization, monitoring.
+* On every push to `main` branch
 
-Documented all steps & challenges for reproducibility.
+---
 
+## 💡 PM2 Commands
+
+Local Dev with Watch Mode:
+
+```bash
+npm run pm2:dev
+```
+
+Stop All Processes:
+
+```bash
+npm run pm2:stop
+```
+
+List All Processes:
+
+```bash
+npm run pm2:list
+```
+
+---
+
+## 🧠 Challenges Faced & Solutions
+
+### 1. **Port Conflicts**
+
+* **Issue:** Docker failed with `Only one usage of each socket address...`
+* **Cause:** Ports like `8080` and `3000` already in use locally.
+* **Solution:** Stopped conflicting processes using:
+
+  ```bash
+  netstat -ano | findstr :8080
+  taskkill /PID <pid> /F
+  ```
+
+### 2. **Prometheus Scraping Error**
+
+* **Issue:** `Error scraping target: no such host`
+* **Cause:** Wrong service name in Prometheus config.
+* **Solution:** Updated `prometheus.yml` to use correct Docker service name.
+
+### 3. **Grafana Plugin Installation Delay**
+
+* **Issue:** Grafana plugins downloaded on container start slowed startup.
+* **Solution:** Pre-install plugins in Dockerfile or wait for background installer.
+
+### 4. **Git Push Rejected**
+
+* **Issue:** Remote branch ahead, causing push rejection.
+* **Solution:**
+
+  ```bash
+  git pull origin main --rebase
+  git push origin main
+  ```
+
+### 5. **Switching Backend to PM2**
+
+* **Steps Taken:**
+
+  * Installed `pm2` in backend dependencies.
+  * Created `ecosystem.config.js`.
+  * Updated `Dockerfile` to run:
+
+    ```dockerfile
+    CMD ["pm2-runtime", "ecosystem.config.js"]
+    ```
+  * Verified with `pm2 ls` inside container.
+
+---
+
+## 📸 Architecture Overview
+
+```
+[ React Frontend ]  -->  [ Express Backend (PM2) ]  -->  [ Prometheus ]
+                                                       ↘ [ Grafana ]
+```
+
+---
+
+## 📜 License
+
+MIT License
+
+```
+
+---
+
+Do you want me to **add real screenshots** of Prometheus, Grafana, and PM2 output into this README so your GitHub page looks more professional? That would make it stand out a lot.
+```
