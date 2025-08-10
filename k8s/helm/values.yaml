@@ -1,0 +1,12 @@
+image:
+  backend: your-dockerhub-username/pulseboard-backend:latest
+  frontend: your-dockerhub-username/pulseboard-frontend:latest
+
+replicaCount: 1
+
+service:
+  backendPort: 8080
+  frontendPort: 80
+
+ingress:
+  enabled: false

@@ -1,0 +1,43 @@
+{
+  "title": "PulseBoard Overview",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "HTTP Requests",
+      "targets": [
+        {
+          "expr": "pulse_http_requests_total"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Request Duration (p95)",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(pulse_http_request_duration_seconds_bucket[5m])) by (le))"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "CPU %",
+      "targets": [
+        {
+          "expr": "pulse_cpu_usage_percent"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory %",
+      "targets": [
+        {
+          "expr": "pulse_memory_usage_percent"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 36,
+  "version": 1
+}

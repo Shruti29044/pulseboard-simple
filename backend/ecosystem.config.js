@@ -1,0 +1,1 @@
+module.exports={apps:[{name:"pulseboard-backend",script:"src/index.js",instances:"max",exec_mode:"cluster",env:{PORT:8080}}]};

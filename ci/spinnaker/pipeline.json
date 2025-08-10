@@ -1,0 +1,20 @@
+{
+  "application": "pulseboard",
+  "name": "pulseboard-deploy",
+  "stages": [
+    {
+      "type": "deploy",
+      "name": "Deploy to Staging",
+      "clusters": [
+        {
+          "account": "k8s-account",
+          "application": "pulseboard"
+        }
+      ]
+    },
+    {
+      "type": "manualJudgment",
+      "name": "Promote to Prod?"
+    }
+  ]
+}

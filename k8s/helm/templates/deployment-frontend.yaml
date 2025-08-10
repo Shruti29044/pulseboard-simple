@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pulseboard-frontend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: pulseboard-frontend
+  template:
+    metadata:
+      labels:
+        app: pulseboard-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: {{ .Values.image.frontend }}
+          ports:
+            - containerPort: {{ .Values.service.frontendPort }}
+          env:
+            - name: VITE_API_BASE
+              value: "http://pulseboard-backend:8080"
