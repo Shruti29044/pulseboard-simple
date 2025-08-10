@@ -203,7 +203,56 @@ npm run pm2:list
     ```
   * Verified with `pm2 ls` inside container.
 
+
+## 🚀 Process Management with PM2
+
+The backend service is managed using **[PM2](https://pm2.keymetrics.io/)** to ensure high availability, better CPU utilization, and zero-downtime restarts.
+
+### Why PM2?
+- **Zero Downtime Restarts** – Seamless restarts without dropping requests.
+- **Multi-Core Utilization** – Runs one Node.js process per CPU core.
+- **Auto-Restart on Crash** – Keeps the app alive automatically.
+- **Built-in Monitoring** – Track CPU, memory, and uptime easily.
+- **Graceful Shutdowns** – Handles Docker stop signals correctly.
+
+### PM2 Commands
+```bash
+# Start in production mode
+pm2 start ecosystem.config.js
+
+# Start in watch mode (development)
+npm run pm2:dev
+
+# Stop all processes
+npm run pm2:stop
+
+# View process list
+npm run pm2:list
+
+# View logs
+pm2 logs
+````
+
+### Docker Integration
+
+The backend Dockerfile uses:
+
+```dockerfile
+CMD ["pm2-runtime", "ecosystem.config.js"]
+```
+
+This ensures **PM2 manages the process inside the container** with proper signal handling.
+
 ---
+
+```
+
+---
+
+💡 **Tip for interviews**:  
+When they ask *"How do you ensure zero downtime?"* you can say:  
+> *"I used PM2 in cluster mode with Docker. This way, my backend runs on multiple CPU cores and can restart without dropping requests. The PM2 process manager also ensures automatic restarts if something crashes."*
+
 
 ## 📸 Architecture Overview
 
