@@ -1,48 +1,115 @@
 # PulseBoard – Simple Full-Stack DevOps + Monitoring + NLP Demo
 
-This is a **small, runnable** project that matches your resume bullets:
+📌 Project Overview
+PulseBoard Simple is an internal web application designed to monitor backend service metrics in real time.
+It features:
 
-- Node.js (Express) backend APIs
-- React + Tailwind CSS frontend with **Recharts** and **Chart.js**
-- Prometheus metrics + Grafana dashboard (pilot)
-- Docker + Helm for containerization and k8s
-- GitHub Actions + Jenkins + Spinnaker skeleton for CI/CD
-- PM2 for zero-downtime process management
-- Simple **NLP sentiment** over ~10k mock reviews
+Backend API built with Node.js & Express.
 
-## Quickstart (Local Dev)
-Backend:
-```bash
-cd backend
-npm install
-npm run dev
-# http://localhost:8080/api/health
-# http://localhost:8080/metrics
-# http://localhost:8080/api/sentiment/summary
-```
+Frontend UI built with React.js, Tailwind CSS, Chart.js, and Recharts.
 
-Frontend (new terminal):
-```bash
-cd frontend
-npm install
-npm run dev
-# http://localhost:5173
-```
+Real-time monitoring using Prometheus and Grafana.
 
-## Docker Compose (includes Prometheus & Grafana)
-```bash
-docker compose up --build
-# Frontend  : http://localhost:3000
-# Backend   : http://localhost:8080
-# Prometheus: http://localhost:9090
-# Grafana   : http://localhost:3001 (login: admin / admin)
-```
+Containerized deployment using Docker & Docker Compose.
 
-## Helm (Kubernetes) – app only (frontend + backend)
-```bash
-cd k8s/helm
-helm upgrade --install pulseboard . -f values.yaml
-kubectl port-forward svc/pulseboard-frontend 3000:80
-```
+CI/CD pipeline integration using GitHub Actions.
 
-> Replace Docker image names in `k8s/helm/values.yaml` and CI files with your Docker Hub handle before real use.
+The project replicates a real-world DevOps workflow where backend and frontend services are integrated with monitoring tools for system health tracking.
+
+🛠️ Tech Stack
+Frontend
+React.js (component-based UI)
+
+Tailwind CSS (responsive design)
+
+Chart.js & Recharts (data visualization)
+
+Backend
+Node.js (Express API)
+
+/metrics endpoint for Prometheus scraping
+
+Monitoring
+Prometheus for collecting metrics
+
+Grafana for visualizing metrics
+
+DevOps
+Docker & Docker Compose (containerization & orchestration)
+
+GitHub Actions (CI/CD pipeline)
+
+🚀 How to Run the Project Locally
+1️⃣ Clone the Repository
+bash
+Copy
+Edit
+git clone https://github.com/your-username/pulseboard-simple.git
+cd pulseboard-simple
+2️⃣ Start Services
+bash
+Copy
+Edit
+docker compose up -d --build
+3️⃣ Access Services
+Frontend: http://localhost:3000
+
+Prometheus: http://localhost:9090
+
+Grafana: http://localhost:3001
+
+📊 Prometheus & Grafana Setup
+Prometheus scrapes the backend /metrics endpoint every 15s.
+
+Grafana is pre-configured with a dashboard for service uptime & request performance.
+
+💡 Challenges Faced & Solutions
+1. Port Conflicts
+Problem: Docker Compose failed to start because port 8080 was already in use.
+
+Solution: Identified the process using netstat -ano & killed it with:
+
+bash
+Copy
+Edit
+taskkill /PID <PID> /F
+2. Prometheus Target Down
+Problem: Prometheus showed backend:8080 as down.
+
+Solution: Updated Prometheus config to match backend service name in Docker network.
+
+3. Frontend “Site Not Reached” Error
+Problem: React app failed to load after container start.
+
+Solution: Ensured nginx was serving the /dist build output & rebuilt containers.
+
+4. Grafana Plugin Installation Delays
+Problem: Grafana took time to install default plugins during first run.
+
+Solution: Allowed initial boot time and verified logs with:
+
+bash
+Copy
+Edit
+docker logs -f grafana
+5. CI/CD Integration
+Problem: Needed automated build/test on GitHub.
+
+Solution: Created .github/workflows/ci-cd.yml to build and test containers on push.
+
+📦 Deployment Workflow
+Code changes pushed to main branch.
+
+GitHub Actions CI builds backend & frontend containers.
+
+Docker Compose used for local development.
+
+Prometheus & Grafana containers deployed for monitoring.
+
+🏆 Outcome
+Successfully deployed a full-stack monitoring solution locally.
+
+Integrated DevOps practices: CI/CD, containerization, monitoring.
+
+Documented all steps & challenges for reproducibility.
+
