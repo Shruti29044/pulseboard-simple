@@ -203,6 +203,41 @@ npm run pm2:list
     ```
   * Verified with `pm2 ls` inside container.
 
+### 6.  PM2 'module is not defined' Error
+
+* **Steps Taken:**
+  
+   *  Cause: Using ES Modules syntax with PM2.
+   *  Solution: Rewrote ecosystem.config.js as CommonJS (module.exports = { ... }).
+
+### 7.  Prometheus Not Reachable
+
+   * Cause: Prometheus service not running after Docker restart.
+   * Solution: docker compose up -d prometheus
+   * Checked readiness: curl http://localhost:9090/-/ready
+   * Example Commands Used in Development:
+     # Start all services fresh
+     
+docker compose up -d --build
+
+# Rebuild backend only
+docker compose build backend --no-cache
+
+# Restart Prometheus
+docker compose up -d --force-recreate prometheus
+
+# Check logs
+docker compose logs --no-color backend
+docker compose logs --no-color prometheus
+
+# Enter backend container
+docker compose exec backend sh
+
+# Test API health
+curl http://localhost:8080/api/health
+
+# Check Prometheus readiness
+curl http://localhost:9090/-/ready
 
 ## 🚀 Process Management with PM2
 
